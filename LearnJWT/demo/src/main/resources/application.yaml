@@ -1,0 +1,17 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/devper315
+    username: openpg
+    password: 1
+  jpa:
+    hibernate:
+      ddl-auto: update 
+    show-sql: true
+
+jwt:
+  signerKey: "bj0hKxleZxWk8mHcrceJBce84L5qniIsLM3UcEw6NZWiyTXXN3zTVFoBRB0BScPz"
