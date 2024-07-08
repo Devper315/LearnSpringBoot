@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,11 +25,13 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableMethodSecurity
 public class SecurityConfig {
 	private final String[] PUBLIC_GET_ENPOINTS = {};
-	private final String[] PUBLIC_POST_ENPOINTS = { "/user", "/auth/login", "/auth/instrospect" };
+	private final String[] PUBLIC_POST_ENPOINTS = { "/user", "/auth/login", "/auth/instrospect", "auth/logout" };
 
 	@Value("${jwt.signerKey}")
 	private String signerKey;
-	
+
+	@Autowired
+	private CustomJWTDecoder jwtDecoder;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -41,9 +44,8 @@ public class SecurityConfig {
 		// xác thực bằng token
 		httpSecurity.oauth2ResourceServer(oath2 -> 
 					oath2.jwt(jwtConfigurer -> 
-							  jwtConfigurer.decoder(jwtDecoder())
-							  .jwtAuthenticationConverter(jwtAuthenticationConverter())))
-							  ;
+							  jwtConfigurer.decoder(jwtDecoder)
+							  .jwtAuthenticationConverter(jwtAuthenticationConverter())));
 		// tắt kiểm tra CSRF
 		httpSecurity.csrf(AbstractHttpConfigurer::disable);
 		return httpSecurity.build();
@@ -58,12 +60,7 @@ public class SecurityConfig {
 		return authConverter;
 	}
 	
-	@Bean
-	public JwtDecoder jwtDecoder() {
-		SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), "HS512");
-		return NimbusJwtDecoder.withSecretKey(secretKeySpec).macAlgorithm(MacAlgorithm.HS512).build();
-	}
-	
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();

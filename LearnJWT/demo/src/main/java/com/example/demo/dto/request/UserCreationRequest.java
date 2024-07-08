@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -20,4 +21,5 @@ public class UserCreationRequest {
 	String lastName;
 	@DobConstraint(min = 18)
 	LocalDate dateOfBirth;
+	List<Long> roles;
 }

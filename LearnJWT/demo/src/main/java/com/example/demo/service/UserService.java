@@ -39,6 +39,8 @@ public class UserService {
             throw new AppException(ErrorCode.USER_EXISTED);
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        List<Role> roles = roleRepo.findAllById(request.getRoles());
+        user.setRoles(new HashSet<>(roles));
         return userMapper.toUserResponse(userRepo.save(user));
     }
 
