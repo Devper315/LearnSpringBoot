@@ -24,45 +24,46 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-	private final String[] PUBLIC_GET_ENPOINTS = {};
-	private final String[] PUBLIC_POST_ENPOINTS = { "/user", "/auth/login", "/auth/instrospect", "auth/logout" };
+    private final String[] PUBLIC_GET_ENPOINTS = {};
+    private final String[] PUBLIC_POST_ENPOINTS = {"/user", "/auth/login", "/auth/instrospect", "auth/logout",
+            "auth/refresh"};
 
-	@Value("${jwt.signerKey}")
-	private String signerKey;
+    @Value("${jwt.signerKey}")
+    private String signerKey;
 
-	@Autowired
-	private CustomJWTDecoder jwtDecoder;
+    @Autowired
+    private CustomJWTDecoder jwtDecoder;
 
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-		// cấu hình request
-		httpSecurity.authorizeHttpRequests(request -> 
-		request.requestMatchers(HttpMethod.GET, PUBLIC_GET_ENPOINTS).permitAll()
-				.requestMatchers(HttpMethod.POST, PUBLIC_POST_ENPOINTS).permitAll()
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        // cấu hình request
+        httpSecurity.authorizeHttpRequests(request ->
+                request.requestMatchers(HttpMethod.GET, PUBLIC_GET_ENPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.POST, PUBLIC_POST_ENPOINTS).permitAll()
 //				.requestMatchers(HttpMethod.GET, "/user").hasRole(Role.ADMIN.name())
-				.anyRequest().authenticated());
-		// xác thực bằng token
-		httpSecurity.oauth2ResourceServer(oath2 -> 
-					oath2.jwt(jwtConfigurer -> 
-							  jwtConfigurer.decoder(jwtDecoder)
-							  .jwtAuthenticationConverter(jwtAuthenticationConverter())));
-		// tắt kiểm tra CSRF
-		httpSecurity.csrf(AbstractHttpConfigurer::disable);
-		return httpSecurity.build();
-	}
+                        .anyRequest().authenticated());
+        // xác thực bằng token
+        httpSecurity.oauth2ResourceServer(oath2 ->
+                oath2.jwt(jwtConfigurer ->
+                        jwtConfigurer.decoder(jwtDecoder)
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter())));
+        // tắt kiểm tra CSRF
+        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        return httpSecurity.build();
+    }
 
-	@Bean
-	public JwtAuthenticationConverter jwtAuthenticationConverter() {
-		JwtGrantedAuthoritiesConverter grantedConverter = new JwtGrantedAuthoritiesConverter();
-		grantedConverter.setAuthorityPrefix("");
-		JwtAuthenticationConverter authConverter = new JwtAuthenticationConverter();
-		authConverter.setJwtGrantedAuthoritiesConverter(grantedConverter);
-		return authConverter;
-	}
-	
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter grantedConverter = new JwtGrantedAuthoritiesConverter();
+        grantedConverter.setAuthorityPrefix("");
+        JwtAuthenticationConverter authConverter = new JwtAuthenticationConverter();
+        authConverter.setJwtGrantedAuthoritiesConverter(grantedConverter);
+        return authConverter;
+    }
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
