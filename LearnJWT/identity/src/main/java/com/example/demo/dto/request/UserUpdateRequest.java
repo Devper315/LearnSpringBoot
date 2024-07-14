@@ -15,5 +15,5 @@ public class UserUpdateRequest {
 	String lastName;
 	LocalDate dateOfBirth;
 	Set<Long> roles;
-	
+	String city;
 }

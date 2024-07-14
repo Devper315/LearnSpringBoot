@@ -20,6 +20,7 @@ public class UserCreationRequest {
 	String firstName;
 	String lastName;
 	@DobConstraint(min = 18)
-	LocalDate dateOfBirth;
+	LocalDate dob;
 	List<Long> roles;
+	String city;
 }

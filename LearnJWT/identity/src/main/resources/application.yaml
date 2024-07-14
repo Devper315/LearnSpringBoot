@@ -1,7 +1,7 @@
 server:
   port: 8080
   servlet:
-    context-path: /api/v1
+    context-path: /api/v1/identity
 
 spring:
   datasource:
@@ -17,3 +17,7 @@ jwt:
   signerKey: "bj0hKxleZxWk8mHcrceJBce84L5qniIsLM3UcEw6NZWiyTXXN3zTVFoBRB0BScPz"
   validDuration: 9999
   refreshableDuration: 9999
+
+app:
+  service:
+    profile: http://localhost:8081/api/v1/profile

@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.request.ProfileCreateRequest;
 import com.example.demo.dto.request.UserCreationRequest;
 import com.example.demo.dto.request.UserUpdateRequest;
 import com.example.demo.dto.response.UserResponse;
@@ -7,6 +8,8 @@ import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
 import com.example.demo.exception.AppException;
 import com.example.demo.exception.ErrorCode;
+import com.example.demo.httpclient.ProfileClient;
+import com.example.demo.mapper.ProfileMapper;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.repository.RoleRepo;
 import com.example.demo.repository.UserRepo;
@@ -31,8 +34,10 @@ import java.util.Set;
 public class UserService {
     UserRepo userRepo;
     UserMapper userMapper;
+    ProfileMapper profileMapper;
     PasswordEncoder passwordEncoder;
     RoleRepo roleRepo;
+    ProfileClient profileClient;
 
     public UserResponse createUserFromRequest(UserCreationRequest request) {
         if (userRepo.existsByUsername(request.getUsername()))
@@ -41,7 +46,12 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         List<Role> roles = roleRepo.findAllById(request.getRoles());
         user.setRoles(new HashSet<>(roles));
-        return userMapper.toUserResponse(userRepo.save(user));
+        user = userRepo.save(user);
+        ProfileCreateRequest profileRequest = profileMapper.toProfileCreateRequest(request);
+        profileRequest.setUserId(user.getId());
+        Object result = profileClient.createProfile(profileRequest);
+        log.info(result.toString());
+        return userMapper.toUserResponse(user);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

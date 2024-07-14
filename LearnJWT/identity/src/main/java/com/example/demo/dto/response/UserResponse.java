@@ -17,6 +17,7 @@ public class UserResponse {
 	String username;
 	String firstName;
 	String lastName;
-	LocalDate dateOfBirth;
+	LocalDate dob;
 	Set<Role> roles;
+	String city;
 }

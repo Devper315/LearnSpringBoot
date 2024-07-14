@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.request.*;
-import com.example.demo.dto.response.AuthResponse;
+import com.example.demo.dto.response.LoginResponse;
 import com.example.demo.dto.response.IntrospectResponse;
 import com.example.demo.service.AuthService;
 import com.nimbusds.jose.JOSEException;
@@ -22,12 +22,12 @@ import java.text.ParseException;
 public class AutheticationController {
 	AuthService authService;
 	@PostMapping("/login")
-	public ApiResponse<AuthResponse> authenticate(@RequestBody AuthRequest request){
-		AuthResponse result = authService.authenticate(request);
-		return ApiResponse.<AuthResponse>builder().result(result).build();
+	public ApiResponse<LoginResponse> authenticate(@RequestBody LoginRequest request){
+		LoginResponse result = authService.authenticate(request);
+		return ApiResponse.<LoginResponse>builder().result(result).build();
 	}
 	
-	@PostMapping("/instrospect")
+	@PostMapping("/introspect")
 	public ApiResponse<IntrospectResponse> instrospect(@RequestBody IntrospectRequest request) 
 			throws JOSEException, ParseException{
 		IntrospectResponse result = authService.introspect(request);
@@ -41,9 +41,9 @@ public class AutheticationController {
 	}
 
 	@PostMapping("/refresh")
-	public ApiResponse<AuthResponse> refreshToken(@RequestBody RefreshRequest request) throws ParseException, JOSEException {
-		AuthResponse result = authService.refreshToken(request);
-		return ApiResponse.<AuthResponse>builder()
+	public ApiResponse<LoginResponse> refreshToken(@RequestBody RefreshRequest request) throws ParseException, JOSEException {
+		LoginResponse result = authService.refreshToken(request);
+		return ApiResponse.<LoginResponse>builder()
 				.result(result)
 				.build();
 	}

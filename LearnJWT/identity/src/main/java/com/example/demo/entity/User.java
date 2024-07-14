@@ -21,9 +21,8 @@ public class User {
 	Long id;
 	String username;
 	String password;
-	String firstName;
-	String lastName;
-	LocalDate dateOfBirth;
+
 	@ManyToMany
 	Set<Role> roles;
+	String city;
 }

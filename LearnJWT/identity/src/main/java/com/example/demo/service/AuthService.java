@@ -1,10 +1,10 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.request.AuthRequest;
+import com.example.demo.dto.request.LoginRequest;
 import com.example.demo.dto.request.IntrospectRequest;
 import com.example.demo.dto.request.LogoutRequest;
 import com.example.demo.dto.request.RefreshRequest;
-import com.example.demo.dto.response.AuthResponse;
+import com.example.demo.dto.response.LoginResponse;
 import com.example.demo.dto.response.IntrospectResponse;
 import com.example.demo.entity.InvalidToken;
 import com.example.demo.entity.User;
@@ -52,14 +52,14 @@ public class AuthService {
 	@Value("${jwt.refreshableDuration}")
 	protected long REFRESHABLE_DURATION;
 
-	public AuthResponse authenticate(AuthRequest request) {
+	public LoginResponse authenticate(LoginRequest request) {
 		User user = userRepo.findByUsername(request.getUsername())
 				.orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		boolean result = passwordEncoder.matches(request.getPassword(), user.getPassword());
 		if (!result) throw new AppException(ErrorCode.UNAUTHENTICATED);
 		String token = generateToken(user);
-		return AuthResponse.builder().token(token).build();
+		return LoginResponse.builder().token(token).build();
 	}
 	
 	public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
@@ -118,7 +118,7 @@ public class AuthService {
 		invalidTokenRepo.save(invalidToken);
 	}
 
-	public AuthResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
+	public LoginResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
 		SignedJWT signToken = verifyToken(request.getToken(), true);
 		String jit = signToken.getJWTClaimsSet().getJWTID();
 		Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
@@ -130,7 +130,7 @@ public class AuthService {
 		String username = signToken.getJWTClaimsSet().getSubject();
 		User user = userRepo.findByUsername(username).get();
 		String newToken = generateToken(user);
-		return AuthResponse.builder()
+		return LoginResponse.builder()
 				.token(newToken).build();
 	}
 
