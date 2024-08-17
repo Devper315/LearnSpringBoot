@@ -69,7 +69,7 @@ public class UserService {
     public UserResponse getMyInfo() {
         SecurityContext context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
-        User user = userRepo.findByUsername(name).get();
+        User user = userRepo.findByUsername(name).orElse(null);
         return userMapper.toUserResponse(user);
     }
 

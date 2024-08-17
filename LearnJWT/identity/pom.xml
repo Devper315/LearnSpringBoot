@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>demo</artifactId>
+    <artifactId>Identity</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>demo</name>
-    <description>demo</description>
+    <name>Identity</name>
+    <description>Identity</description>
     <url/>
     <licenses>
         <license/>
@@ -95,18 +95,7 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -121,21 +110,11 @@
                             <version>${projectlombok-lombok.version}</version>
                         </path>
                         <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok-mapstruct-binding</artifactId>
-                            <version>${lombok-mapstruct-binding.version}</version>
-                        </path>
-                        <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
                             <version>${mapstruct.version}</version>
                         </path>
                     </annotationProcessorPaths>
-                    <compilerArgs>
-                        <arg>-Amapstruct.suppressGeneratorTimestamp=true</arg>
-                        <arg>-Amapstruct.defaultComponentModel=spring</arg>
-                        <arg>-Amapstruct.verbose=true</arg>
-                    </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>

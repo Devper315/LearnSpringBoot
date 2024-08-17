@@ -5,8 +5,8 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/devper315
-    username: openpg
+    url: jdbc:postgresql://localhost:5432/identity_service
+    username: admin
     password: 1
   jpa:
     hibernate:

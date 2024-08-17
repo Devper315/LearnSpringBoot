@@ -1,6 +1,9 @@
 server:
   port: 8888
 
+app:
+  api-prefix: /api/v1
+
 spring:
   application:
     name: api-gateway
@@ -10,9 +13,9 @@ spring:
         - id: identity_service
           uri: http://localhost:8080
           predicates:
-            - Path=/api/v1/identity/**
+            - Path=${app.api-prefix}/identity/**
         - id: profile_service
           uri: http://localhost:8081
           predicates:
-            - Path=/api/v1/profile/**
+            - Path=${app.api-prefix}/profile/**
 

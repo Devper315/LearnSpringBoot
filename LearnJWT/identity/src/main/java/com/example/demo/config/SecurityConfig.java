@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.example.demo.entity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -43,7 +44,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(request ->
                 request.requestMatchers(HttpMethod.GET, PUBLIC_GET_ENPOINTS).permitAll()
                         .requestMatchers(HttpMethod.POST, PUBLIC_POST_ENPOINTS).permitAll()
-//				.requestMatchers(HttpMethod.GET, "/user").hasRole(Role.ADMIN.name())
+				.requestMatchers(HttpMethod.GET, "/user").hasRole("ADMIN")
                         .anyRequest().authenticated());
         // xác thực bằng token
         httpSecurity.oauth2ResourceServer(oath2 ->

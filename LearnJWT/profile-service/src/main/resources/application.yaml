@@ -3,13 +3,13 @@ server:
   servlet:
     context-path: /api/v1/profile
 spring:
-  neo4j:
-    uri: bolt://localhost:7687
-    authentication:
-      username: neo4j
-      password: 12345678
-logging:
-  level:
-    org.springframework.data.neo4j: DEBUG
-    org.neo4j.ogm.drivers.bolt.request: DEBUG
+  datasource:
+    url: jdbc:postgresql://localhost:5432/profile_service
+    username: admin
+    password: 1
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
 
